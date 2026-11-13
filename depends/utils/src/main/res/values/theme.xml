@@ -20,7 +20,7 @@
         <item name="rippleColor">#FFFFFF</item>
         <item name="boxStrokeColor">?attr/colorPrimaryDark</item>
         <item name="boxStrokeWidth">1dp</item>
-        <item name="cornerRadius">5dp</item>
+        <item name="cornerRadius">12dp</item>
         <item name="thumbTint">@color/thumb_color</item>
 
         <!--Text appearance-->

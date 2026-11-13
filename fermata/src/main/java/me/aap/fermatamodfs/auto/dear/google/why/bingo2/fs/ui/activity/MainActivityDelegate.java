@@ -40,6 +40,7 @@ import android.Manifest.permission;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -81,6 +82,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.widget.ContentLoadingProgressBar;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.color.DynamicColors;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.io.IOException;
@@ -576,7 +578,8 @@ public class MainActivityDelegate extends ActivityDelegate
 	}
 
 	public static void setTheme(Context ctx, boolean auto) {
-		@StyleRes int theme = switch (Prefs.instance.getThemePref(auto)) {
+		int themePref = Prefs.instance.getThemePref(auto);
+		@StyleRes int theme = switch (themePref) {
 			case MainActivityPrefs.THEME_LIGHT -> R.style.AppTheme_Light;
 			case MainActivityPrefs.THEME_SYSTEM -> {
 				if ((ctx.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) ==
@@ -592,13 +595,10 @@ public class MainActivityDelegate extends ActivityDelegate
 			default -> R.style.AppTheme_Dark;
 		};
 		ctx.setTheme(theme);
+		if ((themePref == MainActivityPrefs.THEME_SYSTEM) && (ctx instanceof Activity a))
+			DynamicColors.applyToActivityIfAvailable(a);
 		if ((VERSION.SDK_INT >= VERSION_CODES.S) && (ctx instanceof Activity a)) {
 			a.getSplashScreen().setSplashScreenTheme(theme);
-		}
-	}
-
-		} catch (Throwable t) {
-			Log.w("Failed to apply custom theme background", t);
 		}
 	}
 
@@ -852,6 +852,13 @@ public class MainActivityDelegate extends ActivityDelegate
 		showFragment(R.id.home_fragment);
 	}
 
+	private boolean isBrowseFirstVideoUiActive(@Nullable ActivityFragment fragment) {
+		int navId = getActiveNavItemId();
+		if ((navId == ID_NULL) && (fragment != null)) navId = fragment.getFragmentId();
+		return navId == R.id.plex_fragment || navId == R.id.stremio_fragment ||
+				navId == R.id.nuvio_fragment;
+	}
+
 	/**
 	 * Back outside fragment-local history: leave video/radio, leave modules for the main menu.
 	 * Exit (double-back) only happens from {@link #isHomeFragmentActive() home}.
@@ -916,6 +923,24 @@ public class MainActivityDelegate extends ActivityDelegate
 		if (launchDashcamOnPhone(id)) return;
 		setActiveNavItemId(id);
 		showFragmentLoaded(id, launchInput);
+	}
+
+	private boolean launchDashcamOnPhone(int id) {
+		if (id != R.id.dashcam_addon || !AUTO || !getAppActivity().isCarActivity()) return false;
+		Intent intent = getContext().getPackageManager()
+				.getLaunchIntentForPackage("com.audiiptv.dashcam");
+		if (intent == null) {
+			showAlert(getContext(), R.string.dashcam_app_not_installed);
+			return true;
+		}
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		try {
+			getAppActivity().startActivity(intent);
+		} catch (ActivityNotFoundException err) {
+			Log.e(err, "Failed to open DashCam app");
+			showAlert(getContext(), R.string.dashcam_app_not_installed);
+		}
+		return true;
 	}
 
 

@@ -9,18 +9,20 @@
     <string name="gallery_no_folders">No media folders found.</string>
     <string name="gallery_empty">No photos or videos found on this device.</string>
     <string name="video_player">Video Player</string>
-    <string name="app_name_mobile_release" translatable="false">Fermata Xtream</string>
-    <string name="app_name_auto_release" translatable="false">Fermata Xtream</string>
-    <string name="app_name_mobile_debug" translatable="false">Debug Fermata Xtream</string>
-    <string name="app_name_auto_debug" translatable="false">Debug Fermata Xtream</string>
-    <string name="mirror_service_name_release" translatable="false">Fermata Mirror</string>
-    <string name="mirror_service_name_debug" translatable="false">Debug Fermata Mirror</string>
-    <string name="mirror_fs_service_name_release" translatable="false">FS Fermata Mirror</string>
-    <string name="mirror_fs_service_name_debug" translatable="false">Debug FS Fermata Mirror</string>
+    <string name="app_name_mobile_release" translatable="false">Luka</string>
+    <string name="app_name_auto_release" translatable="false">Luka</string>
+    <string name="app_name_mobile_debug" translatable="false">Debug Luka</string>
+    <string name="app_name_auto_debug" translatable="false">Debug Luka</string>
+    <string name="mirror_service_name_release" translatable="false">Luka Mirror</string>
+    <string name="mirror_service_name_debug" translatable="false">Debug Luka Mirror</string>
+    <string name="mirror_fs_service_name_release" translatable="false">Luka Mirror FS</string>
+    <string name="mirror_fs_service_name_debug" translatable="false">Debug Luka Mirror FS</string>
+    <string name="play_fs_service_name_release" translatable="false">Luka Play FS</string>
+    <string name="play_fs_service_name_debug" translatable="false">Debug Luka Play FS</string>
     <string name="media_service_name_mobile_release" translatable="false">@string/app_name_mobile_release</string>
-    <string name="media_service_name_auto_release" translatable="false">Fermata Media Service</string>
+    <string name="media_service_name_auto_release" translatable="false">Luka Media</string>
     <string name="media_service_name_mobile_debug" translatable="false">@string/app_name_mobile_debug</string>
-    <string name="media_service_name_auto_debug" translatable="false">Debug Fermata Media Service</string>
+    <string name="media_service_name_auto_debug" translatable="false">Debug Luka Media</string>
     <string name="engine_mp_name" translatable="false">MediaPlayer</string>
     <string name="engine_exo_name" translatable="false">ExoPlayer</string>
     <string name="engine_vlc_name" translatable="false">VLC</string>
@@ -38,6 +40,7 @@
     <string name="radio_player_title">RADIO</string>
     <string name="radio_player_subtitle">Online music</string>
     <string name="addon_name_web_browser">Web browser</string>
+    <string name="addon_name_homeassistant" translatable="false">Home Assistant</string>
     <string name="addon_name_youtube" translatable="false">Youtube</string>
     <string name="addon_name_youtube_music" translatable="false">YouTube Music</string>
     <string name="addon_name_youtube_kids" translatable="false">YouTube Kids</string>
@@ -356,6 +359,7 @@
 
     <string name="enable">Enable</string>
     <string name="open_dashcam" translatable="false">Open DashCam</string>
+    <string name="dashcam_app_not_installed">DashCam app is not installed.</string>
     <string name="move_left">Move left</string>
     <string name="move_right">Move right</string>
     <string name="move_up">Move up</string>
@@ -402,19 +406,20 @@
     <string name="open_log">Open log file</string>
     <string name="unlock_phone_and_grant">Unlock the phone and grant the requested permissions.</string>
     <string name="screen_capture_rejected">Screen capture request rejected.</string>
-    <string name="enable_overlay_permission">Enable display over other apps for Fermata Xtream.</string>
-    <string name="enable_write_settings_permission">Allow Fermata Xtream to change system settings.</string>
-    <string name="enable_accessibility_permission">Enable the Fermata Xtream accessibility service for mirror controls.</string>
-    <string name="select_screen_capture_mode">Allow full-screen capture for FS Fermata Mirror.</string>
-    <string name="accessibility_dsc">The accessibility service is used by Fermata Mirror to simulate touch screen events.</string>
+    <string name="enable_overlay_permission">Enable display over other apps for Luka.</string>
+    <string name="enable_write_settings_permission">Allow Luka to change system settings.</string>
+    <string name="enable_accessibility_permission">Enable the Luka accessibility service for mirror controls.</string>
+    <string name="select_screen_capture_mode">Allow full-screen capture for Luka Mirror.</string>
+    <string name="accessibility_dsc">The accessibility service is used by Luka Mirror to simulate touch screen events.</string>
     <string name="accessibility_disclosure_title">Accessibility service</string>
-    <string name="accessibility_disclosure">Fermata uses Android Accessibility Service for the mobile mirror/control feature. It simulates touch gestures, Back/Home actions, and button clicks requested by the user. Fermata does not collect, store, upload, or share screen content or personal data through this service.</string>
+    <string name="accessibility_disclosure">Luka uses Android Accessibility Service for the mobile mirror/control feature. It simulates touch gestures, Back/Home actions, and button clicks requested by the user. Luka does not collect, store, upload, or share screen content or personal data through this service.</string>
     <string name="media_projection_action_text">Start now</string>
 
     <string name="about">About</string>
-    <string name="about_html"><![CDATA[<H1 align="center">Fermata Media Player</H1>
-        <p>Fermata Media Player is a free, open source audio and video player with a simple and
-        intuitive interface.</p>
+    <string name="about_html"><![CDATA[<H1 align="center">Luka</H1>
+        <p>Luka is a free, open source audio and video player with a simple and intuitive
+        interface.</p>
+        <p>Based on the Fermata Media Player open-source project.</p>
         <p><b>Mod feature:</b> Xtream account support added</p>
         <p><b>Version:</b> %1$s (%2$d)</p>
         <p><b>Home page:</b> <a href="%3$s">%3$s</a></p>

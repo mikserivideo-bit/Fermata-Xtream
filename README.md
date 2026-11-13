@@ -62,6 +62,11 @@ Artifacts are written to dist/ as Fermata-free-*.
 - Model cleanup option to delete other downloaded translation models from cache.
 - Default translator remains ML Kit for existing setups.
 
+### Home Assistant browser
+- Added a separate Home Assistant browser tile that opens the fixed instance URL.
+- Available from the Fermata home menu in the Android Auto build; the regular browser remains unchanged.
+- Can be selected to open automatically when Fermata starts through Android Auto.
+
 ### Mirror / Android Auto improvements
 - Simplified FS Fermata Mirror permission flow (step-by-step prompts).
 - Video motion / speed guard for safer video presentation while driving.

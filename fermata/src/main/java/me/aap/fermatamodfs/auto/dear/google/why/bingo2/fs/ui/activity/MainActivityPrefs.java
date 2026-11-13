@@ -37,8 +37,9 @@ public interface MainActivityPrefs
 	int CLOCK_POS_RIGHT = 2;
 	int CLOCK_POS_CENTER = 3;
 
-	Pref<IntSupplier> THEME_MAIN = Pref.i("THEME_MAIN", THEME_DARK);
+	Pref<IntSupplier> THEME_MAIN = Pref.i("THEME_MAIN", THEME_SYSTEM);
 	/** Custom theme shell/window background image URI (paid builds). Empty = theme default. */
+	Pref<Supplier<String>> THEME_BACKGROUND_URI = Pref.s("THEME_BACKGROUND_URI", "");
 	Pref<BooleanSupplier> HIDE_BARS = Pref.b("HIDE_BARS", false);
 	Pref<BooleanSupplier> FULLSCREEN = Pref.b("FULLSCREEN", false);
 	Pref<BooleanSupplier> SHOW_PG_UP_DOWN = Pref.b("SHOW_PG_UP_DOWN", true);
@@ -79,7 +80,7 @@ public interface MainActivityPrefs
 	Pref<IntSupplier> LOCALE =
 			Pref.i("LOCALE", () -> Lang.get(Locale.getDefault().getLanguage()).ordinal());
 
-	Pref<IntSupplier> THEME_AA = Pref.i("THEME_AA", THEME_DARK);
+	Pref<IntSupplier> THEME_AA = Pref.i("THEME_AA", THEME_SYSTEM);
 	Pref<BooleanSupplier> HIDE_BARS_AA = AUTO ? Pref.b("HIDE_BARS_AA", false) : null;
 	Pref<BooleanSupplier> FULLSCREEN_AA = AUTO ? Pref.b("FULLSCREEN_AA", false) : null;
 	Pref<BooleanSupplier> SHOW_PG_UP_DOWN_AA = AUTO ? Pref.b("SHOW_PG_UP_DOWN_AA", true) : null;
@@ -93,6 +94,8 @@ public interface MainActivityPrefs
 	Pref<IntSupplier> MAIN_MENU_COLOR_GREEN_AA = AUTO ? Pref.i("MAIN_MENU_COLOR_GREEN_AA", 255) : null;
 	Pref<IntSupplier> MAIN_MENU_COLOR_BLUE_AA = AUTO ? Pref.i("MAIN_MENU_COLOR_BLUE_AA", 255) : null;
 	Pref<BooleanSupplier> GRID_VIEW_AA = AUTO ? Pref.b("GRID_VIEW_AA", false) : null;
+	Pref<BooleanSupplier> PASSENGER_REMOTE_ENABLED =
+			AUTO ? Pref.b("PASSENGER_REMOTE_ENABLED", false) : null;
 
 	static MainActivityPrefs get() {
 		return MainActivityDelegate.Prefs.instance;

@@ -1,6 +1,7 @@
 package me.aap.fermatamodfs.auto.dear.google.why.bingo2.fs.ui.fragment;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static me.aap.fermatamodfs.auto.dear.google.why.bingo2.fs.BuildConfig.AUTO;
 
 import android.Manifest;
 import android.content.Context;
@@ -39,6 +40,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.color.MaterialColors;
 
 import org.json.JSONObject;
 
@@ -131,7 +133,7 @@ public class HomeFragment extends MainActivityFragment
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
 			@Nullable Bundle savedInstanceState) {
 		Context context = requireContext();
-		mainMenuColor = getActivityDelegate().getPrefs().getMainMenuColorPref(getActivityDelegate());
+		mainMenuColor = getHomeTextColor();
 		LinearLayout root = new LinearLayout(context);
 		root.setOrientation(LinearLayout.VERTICAL);
 		TypedValue background = new TypedValue();
@@ -139,7 +141,8 @@ public class HomeFragment extends MainActivityFragment
 			if (background.resourceId != 0) root.setBackgroundResource(background.resourceId);
 			else root.setBackgroundColor(background.data);
 		} else {
-			root.setBackgroundColor(Color.BLACK);
+			root.setBackgroundColor(MaterialColors.getColor(context,
+					android.R.attr.colorBackground, Color.BLACK));
 		}
 		root.setPadding(dp(18), dp(12), dp(18), dp(18));
 		root.addView(createHeader(context), new LinearLayout.LayoutParams(
@@ -216,7 +219,8 @@ public class HomeFragment extends MainActivityFragment
 
 		temperature = headerText(context, unitPlaceholder());
 		temperature.setGravity(Gravity.CENTER);
-		temperature.setBackground(outlineBackground(mainMenuColor, dp(18), 1));
+		temperature.setBackground(outlineBackground(getSurfaceColor(context), mainMenuColor,
+				dp(18), 1));
 		temperature.setPadding(dp(14), dp(7), dp(14), dp(7));
 		temperature.setClickable(true);
 		temperature.setFocusable(true);
@@ -226,7 +230,7 @@ public class HomeFragment extends MainActivityFragment
 		ImageView mic = new ImageView(context);
 		mic.setImageResource(R.drawable.record_voice);
 		mic.setColorFilter(mainMenuColor);
-		mic.setBackground(outlineBackground(Color.BLACK, mainMenuColor, dp(18), 1));
+		mic.setBackground(outlineBackground(getSurfaceColor(context), mainMenuColor, dp(18), 1));
 		mic.setPadding(dp(10), dp(10), dp(10), dp(10));
 		mic.setClickable(true);
 		mic.setFocusable(true);
@@ -417,14 +421,36 @@ public class HomeFragment extends MainActivityFragment
 
 	private void applyMainMenuColor() {
 		if (getContext() == null) return;
-		mainMenuColor = getActivityDelegate().getPrefs().getMainMenuColorPref(getActivityDelegate());
+		mainMenuColor = getHomeTextColor();
 		if (title != null) title.setTextColor(mainMenuColor);
 		if (temperature != null) {
 			temperature.setTextColor(mainMenuColor);
-			temperature.setBackground(outlineBackground(mainMenuColor, dp(18), 1));
+			temperature.setBackground(outlineBackground(getSurfaceColor(requireContext()),
+					mainMenuColor, dp(18), 1));
 		}
 		updateMicrophoneListening(voiceListening);
 		renderCards();
+	}
+
+	private int getHomeTextColor() {
+		MainActivityDelegate activity = getActivityDelegate();
+		MainActivityPrefs prefs = activity.getPrefs();
+		boolean car = AUTO && activity.isCarActivity();
+		boolean hasCustomColor = car ?
+				prefs.hasPref(MainActivityPrefs.MAIN_MENU_COLOR_RED_AA) ||
+						prefs.hasPref(MainActivityPrefs.MAIN_MENU_COLOR_GREEN_AA) ||
+						prefs.hasPref(MainActivityPrefs.MAIN_MENU_COLOR_BLUE_AA) :
+				prefs.hasPref(MainActivityPrefs.MAIN_MENU_COLOR_RED) ||
+						prefs.hasPref(MainActivityPrefs.MAIN_MENU_COLOR_GREEN) ||
+						prefs.hasPref(MainActivityPrefs.MAIN_MENU_COLOR_BLUE);
+		if (hasCustomColor) return prefs.getMainMenuColorPref(activity);
+		return MaterialColors.getColor(requireContext(),
+				com.google.android.material.R.attr.colorOnSurface, Color.WHITE);
+	}
+
+	private int getSurfaceColor(Context context) {
+		return MaterialColors.getColor(context,
+				com.google.android.material.R.attr.colorSurface, Color.BLACK);
 	}
 
 	private void openModule(int id, @Nullable Object input) {
@@ -517,8 +543,6 @@ public class HomeFragment extends MainActivityFragment
 			super(new MaterialCardView(context));
 			card = (MaterialCardView) itemView;
 			card.setLayoutParams(cardLayoutParams());
-			card.setCardBackgroundColor(
-					isLiquidGlass(context) ? 0x66152B46 : Color.BLACK);
 			card.setRadius(dp(18));
 			card.setClickable(true);
 			card.setFocusable(true);
@@ -556,6 +580,8 @@ public class HomeFragment extends MainActivityFragment
 		void bind(HomeCard c) {
 			card.setTag(c);
 			card.setContentDescription(c.label);
+			card.setCardBackgroundColor(isLiquidGlass(card.getContext()) ?
+					0x66152B46 : getSurfaceColor(card.getContext()));
 			updateHighlight();
 			image.setImageResource(c.icon);
 			image.setColorFilter(mainMenuColor);
@@ -571,7 +597,9 @@ public class HomeFragment extends MainActivityFragment
 
 		private void updateHighlight() {
 			boolean highlighted = dragging || card.hasFocus();
-			card.setStrokeColor(highlighted ? 0xFF66AAFF : mainMenuColor);
+			int accent = MaterialColors.getColor(card.getContext(),
+					androidx.appcompat.R.attr.colorPrimary, 0xFF66AAFF);
+			card.setStrokeColor(highlighted ? accent : mainMenuColor);
 			card.setStrokeWidth(dp(highlighted ? 3 : 1));
 		}
 	}
@@ -776,11 +804,16 @@ public class HomeFragment extends MainActivityFragment
 		ImageView mic = microphone;
 		if (mic == null) return;
 		if (listening) {
-			mic.setColorFilter(Color.BLACK);
-			mic.setBackground(outlineBackground(mainMenuColor, Color.BLACK, dp(18), 1));
+			int accent = MaterialColors.getColor(requireContext(),
+					androidx.appcompat.R.attr.colorPrimary, mainMenuColor);
+			int onAccent = MaterialColors.getColor(requireContext(),
+					com.google.android.material.R.attr.colorOnPrimary, Color.BLACK);
+			mic.setColorFilter(onAccent);
+			mic.setBackground(outlineBackground(accent, onAccent, dp(18), 1));
 		} else {
 			mic.setColorFilter(mainMenuColor);
-			mic.setBackground(outlineBackground(Color.BLACK, mainMenuColor, dp(18), 1));
+			mic.setBackground(outlineBackground(getSurfaceColor(requireContext()),
+					mainMenuColor, dp(18), 1));
 		}
 	}
 

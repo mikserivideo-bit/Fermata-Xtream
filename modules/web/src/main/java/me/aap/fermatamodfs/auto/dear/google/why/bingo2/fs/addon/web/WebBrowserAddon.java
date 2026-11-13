@@ -52,13 +52,17 @@ public class WebBrowserAddon implements FermataFragmentAddon, SharedPreferenceSt
 					"AppleWebKit/{WEBKIT_VERSION} (KHTML, like Gecko) " +
 					"Chrome/{CHROME_VERSION} Safari/{WEBKIT_VERSION}");
 	private static final Pref<BooleanSupplier> DESKTOP_VERSION = Pref.b("DESKTOP_VERSION", false);
-	private static final Pref<BooleanSupplier> WEB_OPEN_ON_START = Pref.b("WEB_OPEN_ON_START", false);
+	protected static final Pref<BooleanSupplier> WEB_OPEN_ON_START = Pref.b("WEB_OPEN_ON_START", false);
 	private static final Pref<Supplier<String[]>> BOOKMARKS = Pref.sa("BOOKMARKS");
 	private final SharedPreferences prefs;
 	private boolean ignorePrefChange;
 
 	public WebBrowserAddon() {
-		prefs = App.get().getSharedPreferences("web", Context.MODE_PRIVATE);
+		this("web");
+	}
+
+	protected WebBrowserAddon(String preferenceName) {
+		prefs = App.get().getSharedPreferences(preferenceName, Context.MODE_PRIVATE);
 	}
 
 	@IdRes
