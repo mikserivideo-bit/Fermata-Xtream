@@ -52,15 +52,13 @@ jobs:
             printf 'keyPassword=%s\n' "$LUKA_KEY_PASSWORD"
           } > local.properties
 
-      - name: Build release APKs
-        run: bash ./gradlew --no-daemon :fermata:assembleMobileRelease :fermata:assembleAutoRelease
+      - name: Build universal release APKs
+        run: bash ./gradlew --no-daemon :releaseDist
 
       - uses: actions/upload-artifact@v4
         with:
-          name: luka-release-apks
-          path: |
-            fermata/build/outputs/apk/mobile/release/*.apk
-            fermata/build/outputs/apk/auto/release/*.apk
+          name: luka-universal-release-apks
+          path: dist/*-universal.apk
           if-no-files-found: error
           retention-days: 14
 
@@ -71,7 +69,6 @@ jobs:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           gh release create "$RELEASE_TAG" \
-            fermata/build/outputs/apk/mobile/release/*.apk \
-            fermata/build/outputs/apk/auto/release/*.apk \
+            dist/*-universal.apk \
             --title "Luka $RELEASE_TAG" \
             --generate-notes

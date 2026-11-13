@@ -18,7 +18,7 @@ Artifacts are written to dist/ as Fermata-free-*.
 
 ## Luka Android releases
 
-The Android application ID is `hr.from.luka`. GitHub Actions builds signed mobile and Android Auto release APKs; pushing a `v*` tag publishes them as a GitHub Release.
+The Android application ID is `hr.from.luka`. GitHub Actions builds signed universal APKs for mobile and Android Auto; these include dynamic feature modules so optional players work when installed directly. Pushing a `v*` tag publishes them as a GitHub Release.
 
 Before running the workflow, configure these repository Actions secrets with one persistent signing keystore:
 
@@ -77,7 +77,9 @@ Keep a secure backup of the keystore and do not commit it. The same key must be 
 
 ### Home Assistant browser
 - Added a separate Home Assistant browser tile that opens the fixed instance URL.
-- Available from the Fermata home menu in the Android Auto build; the regular browser remains unchanged.
+- Home Assistant and the regular browser are enabled by default and shown in the home menu.
+- Both can be enabled or disabled under Settings > Add-ons.
+- Android Auto shows one Luka Media app entry; add-ons appear inside Luka rather than as separate launcher apps.
 - Can be selected to open automatically when Fermata starts through Android Auto.
 
 ### Mirror / Android Auto improvements

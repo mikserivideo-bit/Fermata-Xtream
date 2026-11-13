@@ -32,13 +32,15 @@ ext {
                     name : 'web_browser',
                     icon : 'web',
                     class: 'me.aap.fermatamodfs.auto.dear.google.why.bingo2.fs.addon.web.WebBrowserAddon',
-                    order: 6
+                    order: 6,
+                    enabled: true
             ],
             [
                     name : 'homeassistant',
                     icon : 'web',
                     class: 'me.aap.fermatamodfs.auto.dear.google.why.bingo2.fs.addon.web.HomeAssistantAddon',
-                    order: 7
+                    order: 7,
+                    enabled: true
             ]
     ]
 }

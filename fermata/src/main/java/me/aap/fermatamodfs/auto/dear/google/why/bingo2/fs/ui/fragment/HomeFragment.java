@@ -61,6 +61,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import me.aap.fermatamodfs.auto.dear.google.why.bingo2.fs.R;
+import me.aap.fermatamodfs.auto.dear.google.why.bingo2.fs.addon.AddonInfo;
 import me.aap.fermatamodfs.auto.dear.google.why.bingo2.fs.addon.AddonManager;
 import me.aap.fermatamodfs.auto.dear.google.why.bingo2.fs.addon.FermataAddon;
 import me.aap.fermatamodfs.auto.dear.google.why.bingo2.fs.addon.FermataFragmentAddon;
@@ -74,7 +75,7 @@ import me.aap.utils.ui.view.ToolBarView;
 
 /** Card-based launcher shared by the phone and projected Android Auto activity. */
 public class HomeFragment extends MainActivityFragment
-		implements MediaSessionCallback.Listener, PreferenceStore.Listener {
+		implements MediaSessionCallback.Listener, PreferenceStore.Listener, AddonManager.Listener {
 	private static final String WEATHER_PREFS = "home_weather";
 	private static final String MENU_PREFS = "home_menu";
 	private static final String PREF_USE_FAHRENHEIT = "use_fahrenheit";
@@ -168,6 +169,8 @@ public class HomeFragment extends MainActivityFragment
 		super.onResume();
 		getActivityDelegate().getMediaSessionCallback().addBroadcastListener(this);
 		getActivityDelegate().getPrefs().addBroadcastListener(this);
+		AddonManager.get().addBroadcastListener(this);
+		refreshAddonCards();
 		applyMainMenuColor();
 		refreshTemperature();
 		updateVoiceForMediaState();
@@ -179,7 +182,20 @@ public class HomeFragment extends MainActivityFragment
 		handler.removeCallbacks(voiceMediaCheckRunnable);
 		getActivityDelegate().getMediaSessionCallback().removeBroadcastListener(this);
 		getActivityDelegate().getPrefs().removeBroadcastListener(this);
+		AddonManager.get().removeBroadcastListener(this);
 		super.onPause();
+	}
+
+	@Override
+	public void onAddonChanged(AddonManager mgr, AddonInfo info, boolean installed) {
+		handler.post(this::refreshAddonCards);
+	}
+
+	private void refreshAddonCards() {
+		if (!isAdded() || (getView() == null) || (menuAdapter == null)) return;
+		if (orderChanged) saveCardOrder();
+		loadCards();
+		menuAdapter.notifyDataSetChanged();
 	}
 
 	@Override

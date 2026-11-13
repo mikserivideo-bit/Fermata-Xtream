@@ -13,7 +13,8 @@ ext {
                     icon       : 'tv',
                     class      : 'me.aap.fermatamodfs.auto.dear.google.why.bingo2.fs.addon.tv.TvAddon',
                     order      : 1,
-                    hasSettings: true
+                    hasSettings: true,
+                    enabled    : true
             ]
     ]
 }
