@@ -3,7 +3,7 @@ if (gradle.ext.enableGoogleServices) apply plugin: 'com.google.gms.google-servic
 android {
     defaultConfig {
         namespace 'me.aap.fermatamodfs.auto.dear.google.why.bingo2.fs'
-        def defaultAppId = 'me.aap.fermatamod.dear.google.why.bingo5'
+        def defaultAppId = 'hr.from.luka'
         applicationId defaultAppId
         versionCode VERSION_CODE
         versionName VERSION_NAME

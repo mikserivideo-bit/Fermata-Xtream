@@ -16,6 +16,19 @@ Original project: https://github.com/AndreyPavlenko/Fermata
 
 Artifacts are written to dist/ as Fermata-free-*.
 
+## Luka Android releases
+
+The Android application ID is `hr.from.luka`. GitHub Actions builds signed mobile and Android Auto release APKs; pushing a `v*` tag publishes them as a GitHub Release.
+
+Before running the workflow, configure these repository Actions secrets with one persistent signing keystore:
+
+- `LUKA_KEYSTORE_BASE64`
+- `LUKA_KEYSTORE_PASSWORD`
+- `LUKA_KEY_ALIAS`
+- `LUKA_KEY_PASSWORD`
+
+Keep a secure backup of the keystore and do not commit it. The same key must be used for future updates to install over an existing Luka app.
+
 ## Main Mods in This Fork
 
 ### Xtream account integration (TV addon)
@@ -73,7 +86,7 @@ Artifacts are written to dist/ as Fermata-free-*.
 - Media service Bluetooth auto-start helper for Android Auto connections.
 
 ### UI/branding changes
-- App name changed to ** Fermata Xtream **.
+- App name changed to **Luka** with a separate Android package ID.
 - About page updated for Xtream account support.
 
 ## Upstream updates & fixes (from Fermata 2.0.1)

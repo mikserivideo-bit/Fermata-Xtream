@@ -30,27 +30,48 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      - name: Build APKs
-        run: bash ./gradlew --no-daemon :fermata:assembleMobileDebug :fermata:assembleAutoDebug
+      - name: Configure release signing
+        env:
+          LUKA_KEYSTORE_BASE64: ${{ secrets.LUKA_KEYSTORE_BASE64 }}
+          LUKA_KEYSTORE_PASSWORD: ${{ secrets.LUKA_KEYSTORE_PASSWORD }}
+          LUKA_KEY_ALIAS: ${{ secrets.LUKA_KEY_ALIAS }}
+          LUKA_KEY_PASSWORD: ${{ secrets.LUKA_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "$LUKA_KEYSTORE_BASE64" ] || [ -z "$LUKA_KEYSTORE_PASSWORD" ] || \
+             [ -z "$LUKA_KEY_ALIAS" ] || [ -z "$LUKA_KEY_PASSWORD" ]; then
+            echo "::error::Configure the four LUKA_KEYSTORE_* GitHub Actions secrets before building releases."
+            exit 1
+          fi
+          printf '%s' "$LUKA_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/luka-release.jks"
+          test -s "$RUNNER_TEMP/luka-release.jks"
+          {
+            printf 'storeFile=%s\n' "$RUNNER_TEMP/luka-release.jks"
+            printf 'storePassword=%s\n' "$LUKA_KEYSTORE_PASSWORD"
+            printf 'keyAlias=%s\n' "$LUKA_KEY_ALIAS"
+            printf 'keyPassword=%s\n' "$LUKA_KEY_PASSWORD"
+          } > local.properties
+
+      - name: Build release APKs
+        run: bash ./gradlew --no-daemon :fermata:assembleMobileRelease :fermata:assembleAutoRelease
 
       - uses: actions/upload-artifact@v4
         with:
-          name: luka-debug-apks
+          name: luka-release-apks
           path: |
-            fermata/build/outputs/apk/mobile/debug/*.apk
-            fermata/build/outputs/apk/auto/debug/*.apk
+            fermata/build/outputs/apk/mobile/release/*.apk
+            fermata/build/outputs/apk/auto/release/*.apk
           if-no-files-found: error
           retention-days: 14
 
-      - name: Publish GitHub pre-release
+      - name: Publish GitHub release
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
           gh release create "$RELEASE_TAG" \
-            fermata/build/outputs/apk/mobile/debug/*.apk \
-            fermata/build/outputs/apk/auto/debug/*.apk \
+            fermata/build/outputs/apk/mobile/release/*.apk \
+            fermata/build/outputs/apk/auto/release/*.apk \
             --title "Luka $RELEASE_TAG" \
-            --generate-notes \
-            --prerelease
+            --generate-notes
