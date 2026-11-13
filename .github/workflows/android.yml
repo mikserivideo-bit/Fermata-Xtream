@@ -3,10 +3,11 @@ name: Build Android APKs
 on:
   push:
     branches: [main]
+    tags: ["v*"]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -40,3 +41,16 @@ jobs:
             fermata/build/outputs/apk/auto/debug/*.apk
           if-no-files-found: error
           retention-days: 14
+
+      - name: Publish GitHub pre-release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" \
+            fermata/build/outputs/apk/mobile/debug/*.apk \
+            fermata/build/outputs/apk/auto/debug/*.apk \
+            --title "Luka $RELEASE_TAG" \
+            --generate-notes \
+            --prerelease
