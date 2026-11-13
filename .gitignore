@@ -16,6 +16,7 @@ local.properties
 google-services.json
 TODO
 res/*.jks
+res/luka-signing-secrets.txt
 
 # Local / generated
 github/
