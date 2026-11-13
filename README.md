@@ -79,7 +79,7 @@ Keep a secure backup of the keystore and do not commit it. The same key must be 
 - Added a separate Home Assistant browser tile that opens the fixed instance URL.
 - Home Assistant and the regular browser are enabled by default and shown in the home menu.
 - Both can be enabled or disabled under Settings > Add-ons.
-- Android Auto shows one Luka Media app entry; add-ons appear inside Luka rather than as separate launcher apps.
+- Android Auto has four entries: Luka opens the add-on launcher, Luka Mirror and Luka Mirror FS open the two mirroring modes, and Luka Play FS opens the current or last media item in the player. Add-ons are also available inside Luka.
 - Can be selected to open automatically when Fermata starts through Android Auto.
 
 ### Mirror / Android Auto improvements

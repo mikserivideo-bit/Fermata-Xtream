@@ -140,8 +140,8 @@ public class MainCarActivity extends CarActivity implements FermataActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		MainActivityDelegate.setTheme(this, true);
-		super.onCreate(savedInstanceState);
-		DeviceLicense.guardCar(this, () -> initializeLicensed(savedInstanceState));
+		super.onCreate(null);
+		DeviceLicense.guardCar(this, () -> initializeLicensed(null));
 	}
 
 	private void initializeLicensed(Bundle savedInstanceState) {
